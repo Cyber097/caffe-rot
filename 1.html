@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Caffè Rot – Italian Café</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Poppins", sans-serif
+        }
+
+        body {
+            background: #fffaf3;
+            color: #2c2c2c;
+        }
+
+        header {
+            background: linear-gradient(135deg, #a52a2a, #d2691e);
+            color: white;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        nav {
+            background: #ffe8d6;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+            padding: 10px;
+        }
+
+        nav a {
+            color: #a52a2a;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        nav a:hover {
+            text-decoration: underline;
+        }
+
+        .hero {
+            background: url('https://images.unsplash.com/photo-1517248135467-4c7edcad34c4') center/cover;
+            height: 60vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.7);
+        }
+
+        .hero h2 {
+            font-size: 2.5rem;
+            text-align: center;
+            padding: 0 10px;
+        }
+
+        .menu-section {
+            padding: 50px 10%;
+            text-align: center;
+        }
+
+        .menu-section h2 {
+            color: #a52a2a;
+            margin-bottom: 20px;
+        }
+
+        .menu-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .menu-item {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+            transition: .3s;
+        }
+
+        .menu-item:hover {
+            transform: translateY(-5px);
+        }
+
+        .menu-item img {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+            border-radius: 12px;
+        }
+
+        .menu-item h3 {
+            color: #a52a2a;
+            margin-top: 10px;
+        }
+
+        .menu-item button {
+            margin-top: 10px;
+            padding: 8px 16px;
+            background: #a52a2a;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        .menu-item button:hover {
+            background: #8b1e1e;
+        }
+
+        footer {
+            background: #a52a2a;
+            color: white;
+            text-align: center;
+            padding: 20px;
+            margin-top: 40px;
+        }
+
+        /* Popups */
+        #cartPopup,
+        #paymentPopup {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .cart-content,
+        .payment-content {
+            background: white;
+            border-radius: 16px;
+            padding: 25px;
+            width: 90%;
+            max-width: 400px;
+            text-align: center;
+        }
+
+        .cart-content h3,
+        .payment-content h3 {
+            color: #a52a2a;
+            margin-bottom: 10px;
+        }
+
+        .cart-items p {
+            margin: 5px 0;
+        }
+
+        .total {
+            font-weight: 700;
+            margin: 10px 0;
+        }
+
+        .btn {
+            background: #a52a2a;
+            color: white;
+            padding: 10px 16px;
+            border: none;
+            border-radius: 8px;
+            margin-top: 10px;
+            cursor: pointer;
+        }
+
+        .btn:hover {
+            background: #8b1e1e;
+        }
+
+        img.qr {
+            width: 200px;
+            margin: 10px auto;
+            border-radius: 12px;
+        }
+
+        @media(max-width:600px) {
+            header h1 {
+                font-size: 1.8rem;
+            }
+
+            .hero h2 {
+                font-size: 2rem;
+            }
+
+            .menu-item img {
+                height: 150px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <h1>☕ Caffè Rot</h1>
+        <p>Authentic Italian Coffee & Cuisine</p>
+    </header>
+
+    <nav>
+        <a href="#menu">Menu</a>
+        <a href="#about">About</a>
+        <a href="#contact">Contact</a>
+        <a href="javascript:void(0)" onclick="openCart()">🛒 Cart (<span id="cartCount">0</span>)</a>
+    </nav>
+
+    <section class="hero">
+        <h2>Welcome to Caffè Rot</h2>
+        <p>Experience the true taste of Italy</p>
+    </section>
+
+    <section id="menu" class="menu-section">
+        <h2>Our Italian Menu</h2>
+        <div class="menu-grid">
+            <div class="menu-item">
+                <img src="https://us.123rf.com/450wm/erkanatbas/erkanatbas1608/erkanatbas160800065/65276581-margarita-pizza-top-view.jpg"
+                    alt="Pizza Margherita">
+                <h3>Pizza Margherita</h3>
+                <p>Classic tomato sauce, mozzarella, and basil.</p>
+                <p><strong>₹10</strong></p>
+                <button onclick="addToCart('Pizza Margherita',10)">Add to Cart</button>
+            </div>
+            <div class="menu-item">
+                <img src="https://images.unsplash.com/photo-1603133872878-684f208fb84b" alt="Pasta Carbonara">
+                <h3>Pasta Carbonara</h3>
+                <p>Creamy sauce with pancetta and parmesan.</p>
+                <p><strong>₹20</strong></p>
+                <button onclick="addToCart('Pasta Carbonara',20)">Add to Cart</button>
+            </div>
+            <div class="menu-item">
+                <img src="https://media.gettyimages.com/id/154947381/photo/white-plate-of-freeform-tiramisu-on-beige-surface.jpg?s=612x612&w=0&k=20&c=cJH87cEBx-2maNRmSRdrqLsBnCt8xpBrQttf32BPyts="
+                    alt="Tiramisu">
+                <h3>Tiramisu</h3>
+                <p>Coffee-flavored Italian dessert.</p>
+                <p><strong>₹30</strong></p>
+                <button onclick="addToCart('Tiramisu',30)">Add to Cart</button>
+            </div>
+        </div>
+    </section>
+
+    <section id="about" class="menu-section">
+        <h2>About Us</h2>
+        <p>Caffè Rot brings the authentic Italian café experience with handcrafted coffee, fresh pasta, and wood-fired
+            pizzas.</p>
+    </section>
+
+    <section id="contact" class="menu-section">
+        <h2>Contact Us</h2>
+        <p>📍 <a href="https://maps.app.goo.gl/qE7TxMtpJyvgCU1N9?g_st=aw" target="_blank">469, Shiv Aradhana Society,
+                near D-Mart Bhuj-Kutch</a></p>
+        <p>📞 <a href="tel:9998777064">9998777064</a></p>
+        <p>📧 <a href="mailto:palsatendra4515@gmail.com">palsatendra4515@gmail.com</a></p>
+    </section>
+
+    <footer>
+        <p>© 2025 Caffè Rot. All Rights Reserved.</p>
+    </footer>
+
+    <!-- Cart Popup -->
+    <div id="cartPopup">
+        <div class="cart-content">
+            <h3>Your Cart</h3>
+            <div id="cartItems" class="cart-items"></div>
+            <p class="total" id="cartTotal"></p>
+            <button class="btn" onclick="checkout()">Proceed to Checkout</button><br>
+            <button class="btn" onclick="closeCart()">Close</button>
+        </div>
+    </div>
+
+    <!-- Payment Popup -->
+    <div id="paymentPopup">
+        <div class="payment-content">
+            <h3>Payment Options</h3>
+            <p id="billAmount"></p>
+            <div class="payment-methods">
+                <button class="btn" onclick="showUPI()">UPI</button>
+                <button class="btn" onclick="showCard()">Credit/Debit Card</button>
+                <button class="btn" onclick="showCash()">Cash</button>
+                <button class="btn" onclick="sendWhatsApp()">📱 Send Order via WhatsApp</button>
+            </div>
+            <div id="paymentDetails"></div>
+            <button class="btn" onclick="closePayment()">Close</button>
+        </div>
+    </div>
+
+    <script>
+        let cart = [], total = 0;
+        function addToCart(name, price) {
+            cart.push({ name, price });
+            total += price;
+            document.getElementById("cartCount").innerText = cart.length;
+            alert(name + " added to cart!");
+        }
+        function openCart() {
+            const items = document.getElementById("cartItems");
+            items.innerHTML = "";
+            cart.forEach(i => items.innerHTML += `<p>${i.name} - ₹${i.price}</p>`);
+            document.getElementById("cartTotal").innerText = "Total: ₹" + total;
+            document.getElementById("cartPopup").style.display = "flex";
+        }
+        function closeCart() { document.getElementById("cartPopup").style.display = "none"; }
+        function checkout() {
+            document.getElementById("cartPopup").style.display = "none";
+            document.getElementById("paymentPopup").style.display = "flex";
+            document.getElementById("billAmount").innerText = "Total Payable: ₹" + total;
+        }
+        function closePayment() { document.getElementById("paymentPopup").style.display = "none"; }
+        function showUPI() {
+            document.getElementById("paymentDetails").innerHTML = `
+    <h4>Pay via UPI</h4>
+    <p>Scan the QR below or use UPI ID:</p>
+    <p><strong>palajay99877-1@oksbi</strong></p>
+    <img src="qr.jpeg" alt="UPI QR Code" class="qr">
+    <p>After payment, show the confirmation to our staff. Thank you ❤️</p>`;
+        }
+        function showCard() {
+            document.getElementById("paymentDetails").innerHTML = `
+    <h4>Credit/Debit Card</h4>
+    <input type="text" placeholder="Card Number" style="width:90%;padding:8px;margin:5px;"><br>
+    <input type="text" placeholder="MM/YY" style="width:43%;padding:8px;margin:5px;">
+    <input type="text" placeholder="CVV" style="width:43%;padding:8px;margin:5px;"><br>
+    <button class="btn" onclick="alert('Payment processed successfully! Thank you ❤️')">Pay ₹${total}</button>`;
+        }
+        function showCash() {
+            document.getElementById("paymentDetails").innerHTML = `
+    <h4>Cash Payment</h4>
+    <p>Please pay ₹${total} at the counter after collecting your order. Grazie ❤️</p>`;
+        }
+        function sendWhatsApp() {
+            let msg = "🧾 *Caffè Rot Order*\n\n";
+            cart.forEach(i => msg += `• ${i.name} - ₹${i.price}\n`);
+            msg += `\n💰 *Total:* ₹${total}\n\nThank you! ☕❤️`;
+            let url = `https://wa.me/919998777064?text=${encodeURIComponent(msg)}`;
+            window.open(url, "_blank");
+        }
+    </script>
+
+</body>
+
+</html>
